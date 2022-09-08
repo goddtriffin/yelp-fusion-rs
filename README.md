@@ -89,6 +89,17 @@ I fully intend to implement all of those features so that this library can do ev
 If you have a dire need for any of those endpoints, please ping me via an issue on Github and I'll know to prioritize that work.
 If you're feeling extra adventurous and/or REALLY need those endpoints implemented, please send a pull request :)
 
+#### Builder pattern
+
+Currently, the only way to create instances of each struct is by using ::new().
+By implementing the Builder pattern on each struct, less work has to be done on the library users' side as they don't 
+have to throw in many None values for each optional field they don't want to use.
+Not only would this make the library more ergonomic to use, but it would vastly improve readability (specifically at 
+each struct initialization point).
+
+This hasn't been prioritized yet as I am currently satisfied with ::new() for my use cases.
+Pull requests are welcome!
+
 ### Commands
 
 - `make lint`
