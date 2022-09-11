@@ -1,49 +1,7 @@
-use crate::error::{ApiErrorResponse, Error};
-use crate::models::{Attribute, Business, Coordinates, PriceType, Region, SortBy};
-use crate::yelp_fusion::YelpFusion;
-use bytes::Bytes;
-use reqwest::{RequestBuilder, StatusCode};
+use crate::endpoints::{BusinessSearchPayloadBuilder, BusinessSearchPayloadError};
+use crate::models::{Attribute, Coordinates, PriceType, SortBy};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
-
-impl YelpFusion {
-    /// # Errors
-    ///
-    /// Will return `Err` if an error occurred while creating/sending the request,
-    /// if it failed to decode the response's bytes, if the response's status code was not a
-    /// success, or if it failed to serialize the response bytes into `BusinessSearchResponse`.
-    pub async fn business_search(
-        self,
-        payload: BusinessSearchPayload,
-    ) -> Result<BusinessSearchResponse, Error> {
-        // create request
-        let request: RequestBuilder = self
-            .client
-            .get(format!("{}/businesses/search", self.base_url))
-            .bearer_auth(self.api_key)
-            .query(&payload.to_query_params());
-
-        // send request, get response
-        let response = request.send().await?;
-
-        // parse status code and returned bytes
-        let status_code: StatusCode = response.status();
-        let bytes: Bytes = response.bytes().await?;
-
-        // check if failure
-        if !status_code.is_success() {
-            let error_response: ApiErrorResponse = serde_json::from_slice(&bytes)?;
-            return Err(Error::RequestFailed {
-                error_response,
-                status_code,
-            });
-        }
-
-        // success
-        let response: BusinessSearchResponse = serde_json::from_slice(&bytes)?;
-        Ok(response)
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BusinessSearchPayload {
@@ -139,9 +97,20 @@ pub struct BusinessSearchPayload {
 }
 
 impl BusinessSearchPayload {
-    #[must_use]
-    #[allow(clippy::too_many_arguments)]
-    pub const fn new(
+    /// # Errors
+    ///
+    /// Returns `BusinessSearchPayloadError::BothLocationAndLatLongSet` if both `location` and
+    /// `coordinates` are set. Only one or the other can be set.
+    ///
+    /// Returns `BusinessSearchPayloadError::RadiusTooLarge` if `radius` is over `40,000` meters
+    /// (~25 miles).
+    ///
+    /// Returns `BusinessSearchPayloadError::LimitTooLarge` if `limit` is over `50`.
+    ///
+    /// Returns `BusinessSearchPayloadError::BothOpenNowAndOpenAtSet` if both `open_now` and
+    /// `open_at` are set. Only one of the other can be set.
+    #[allow(clippy::too_many_arguments, clippy::missing_const_for_fn)]
+    pub fn new(
         term: Option<String>,
         location: Option<String>,
         coordinates: Option<Coordinates>,
@@ -155,8 +124,32 @@ impl BusinessSearchPayload {
         open_now: Option<bool>,
         open_at: Option<usize>,
         attributes: Option<HashSet<Attribute>>,
-    ) -> Self {
-        Self {
+    ) -> Result<Self, BusinessSearchPayloadError> {
+        // only `location` OR `coordinates` can be set - not both
+        if location.is_some() && coordinates.is_some() {
+            return Err(BusinessSearchPayloadError::BothLocationAndLatLongSet);
+        }
+
+        // make sure radius is under `40,000` meters (~25 miles)
+        if let Some(radius) = radius {
+            if radius > 40_000 {
+                return Err(BusinessSearchPayloadError::RadiusTooLarge(radius));
+            }
+        }
+
+        // make sure limit is under `50` entries
+        if let Some(limit) = limit {
+            if limit > 50 {
+                return Err(BusinessSearchPayloadError::LimitTooLarge(limit));
+            }
+        }
+
+        // only `open_now` OR `open_at` can be set - not both
+        if open_now.is_some() && open_at.is_some() {
+            return Err(BusinessSearchPayloadError::BothOpenNowAndOpenAtSet);
+        }
+
+        Ok(Self {
             term,
             location,
             coordinates,
@@ -170,7 +163,12 @@ impl BusinessSearchPayload {
             open_now,
             open_at,
             attributes,
-        }
+        })
+    }
+
+    #[must_use]
+    pub fn builder() -> BusinessSearchPayloadBuilder {
+        BusinessSearchPayloadBuilder::default()
     }
 
     #[must_use]
@@ -255,21 +253,4 @@ impl BusinessSearchPayload {
 
         query_params
     }
-}
-
-/// Response body from Business Search request.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BusinessSearchResponse {
-    /// Total number of business Yelp finds based on the search criteria.
-    ///
-    /// Sometimes, the value may exceed 1000.
-    /// In such case, you still can only get up to 1000 businesses using multiple queries and
-    /// combinations of the "limit" and "offset" parameters.
-    pub total: usize,
-
-    /// List of business Yelp finds based on the search criteria.
-    pub businesses: Vec<Business>,
-
-    /// Suggested area in a map to display results in.
-    pub region: Option<Region>,
 }
