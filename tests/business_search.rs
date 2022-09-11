@@ -12,26 +12,20 @@ async fn test() {
     let yelp_fusion_client: YelpFusion = YelpFusion::new(yelp_fusion_api_key, None);
 
     // create payload
-    let business_search_payload: BusinessSearchPayload = BusinessSearchPayload::new(
-        None,
-        None,
-        Some(Coordinates::new(37.772_484, -122.396_68)),
-        Some(1609),
-        Some(vec![String::from("mexican"), String::from("sandwiches")]),
-        None,
-        Some(50),
-        None,
-        None,
-        Some(HashSet::from([
+    let business_search_payload: BusinessSearchPayload = BusinessSearchPayload::builder()
+        .coordinates(Coordinates::new(37.772_484, -122.396_68))
+        .radius(1609)
+        .categories(vec![String::from("mexican"), String::from("sandwiches")])
+        .limit(50)
+        .price(HashSet::from([
             PriceType::OneDollar,
             PriceType::TwoDollar,
             PriceType::ThreeDollar,
             PriceType::FourDollar,
-        ])),
-        Some(false),
-        None,
-        None,
-    );
+        ]))
+        .open_now(false)
+        .build()
+        .unwrap();
 
     // search for businesses
     let business_search_result: Result<BusinessSearchResponse, Error> = yelp_fusion_client

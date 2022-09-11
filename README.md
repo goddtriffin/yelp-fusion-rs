@@ -36,29 +36,23 @@ async fn main() -> Result<(), Error> {
     let yelp_fusion_api_key = env::var("YELP_FUSION_API_KEY").expect("no Yelp Fusion API key");
 
     let yelp_fusion_client: YelpFusion = YelpFusion::new(yelp_fusion_api_key, None);
-    let business_search_payload: BusinessSearchPayload = BusinessSearchPayload::new(
-        None,
-        None,
-        Some(Coordinates::new(37.7724847, -122.3966801)),
-        Some(1609),
-        Some(vec![String::from("mexican"), String::from("sandwiches")]),
-        None,
-        Some(50),
-        None,
-        None,
-        Some(HashSet::from([
-            PriceType::OneDollar,
-            PriceType::TwoDollar,
-            PriceType::ThreeDollar,
-            PriceType::FourDollar,
-        ])),
-        Some(false),
-        None,
-        None,
-    );
+    let business_search_payload: BusinessSearchPayload = BusinessSearchPayload::builder()
+            .coordinates(Coordinates::new(37.772_484, -122.396_68))
+            .radius(1609)
+            .categories(vec![String::from("mexican"), String::from("sandwiches")])
+            .limit(50)
+            .price(HashSet::from([
+              PriceType::OneDollar, 
+              PriceType::TwoDollar, 
+              PriceType::ThreeDollar, 
+              PriceType::FourDollar,
+            ]))
+            .open_now(false)
+            .build()
+            .unwrap();
     let business_search_response: BusinessSearchResponse = yelp_fusion_client
-        .business_search(business_search_payload)
-        .await?;
+            .business_search(business_search_payload)
+            .await?;
     
     println!(
         "{}",
@@ -88,17 +82,6 @@ I fully intend to implement all of those features so that this library can do ev
 
 If you have a dire need for any of those endpoints, please ping me via an issue on Github and I'll know to prioritize that work.
 If you're feeling extra adventurous and/or REALLY need those endpoints implemented, please send a pull request :)
-
-#### Builder pattern
-
-Currently, the only way to create instances of each struct is by using ::new().
-By implementing the Builder pattern on each struct, less work has to be done on the library users' side as they don't 
-have to throw in many None values for each optional field they don't want to use.
-Not only would this make the library more ergonomic to use, but it would vastly improve readability (specifically at 
-each struct initialization point).
-
-This hasn't been prioritized yet as I am currently satisfied with ::new() for my use cases.
-Pull requests are welcome!
 
 ### Commands
 
