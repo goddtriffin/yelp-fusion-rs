@@ -1,7 +1,7 @@
 use crate::yelp_fusion::YelpFusion;
 
 impl YelpFusion {
-    #[allow(dead_code)]
+    #[allow(dead_code, clippy::unused_async)]
     async fn featured_event(&self) {
         todo!()
     }
