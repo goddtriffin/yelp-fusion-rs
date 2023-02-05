@@ -47,7 +47,7 @@ pub struct Business {
     /// Price level of the business.
     ///
     /// Value is one of $, $$, $$$ and $$$$.
-    pub price: PriceType,
+    pub price: Option<PriceType>,
 
     /// Location of this business, including address, city, state, zip code and country.
     pub location: Location,

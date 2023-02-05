@@ -1,0 +1,27 @@
+# This workflow will build and publish a new version of yelp-fusion-rs-2 on crates.io
+
+name: Publish yelp-fusion-rs-2
+
+on:
+  push:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+        - name: Install Protoc
+          uses: arduino/setup-protoc@v1
+        - uses: actions/checkout@v2
+        - uses: actions-rs/toolchain@v1
+          with:
+              toolchain: stable
+              override: true
+        - uses: katyo/publish-crates@v1
+          with:
+              registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+              args: --no-verify
