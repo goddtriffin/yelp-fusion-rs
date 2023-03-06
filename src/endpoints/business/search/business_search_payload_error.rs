@@ -25,9 +25,9 @@ impl Display for BusinessSearchPayloadError {
                 write!(f, "can either set location OR latitude/longitude, NOT both")
             }
             Self::RadiusTooLarge(radius) => {
-                write!(f, "radius must not be above 40,000 meters: {}", radius)
+                write!(f, "radius must not be above 40,000 meters: {radius}")
             }
-            Self::LimitTooLarge(limit) => write!(f, "limit must not be over 50: {}", limit),
+            Self::LimitTooLarge(limit) => write!(f, "limit must not be over 50: {limit}"),
             Self::BothOpenNowAndOpenAtSet => {
                 write!(f, "can only set open_now OR open_at, not both")
             }

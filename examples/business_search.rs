@@ -21,7 +21,7 @@ async fn main() -> Result<(), Error> {
             PriceType::ThreeDollar,
             PriceType::FourDollar,
         ]))
-        .open_now(false)
+        .open_now(true)
         .build()
         .unwrap();
     let business_search_response: BusinessSearchResponse = yelp_fusion_client
