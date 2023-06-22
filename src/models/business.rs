@@ -13,19 +13,19 @@ pub struct Business {
     ///
     /// Can contain unicode characters.
     /// Example: 'yelp-san-francisco'.
-    pub alias: String,
+    pub alias: Option<String>,
 
     /// Name of this business.
-    pub name: String,
+    pub name: Option<String>,
 
     /// URL of photo for this business.
-    pub image_url: String,
+    pub image_url: Option<String>,
 
     /// Whether business has been (permanently) closed.
     pub is_closed: bool,
 
     /// URL for business page on Yelp.
-    pub url: String,
+    pub url: Option<String>,
 
     /// Number of reviews for this business.
     pub review_count: usize,
