@@ -9,7 +9,7 @@ pub struct ApiErrorResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[allow(clippy::module_name_repetitions)]
+#[expect(clippy::module_name_repetitions)]
 pub struct ApiError {
     pub code: String,
     pub description: String,

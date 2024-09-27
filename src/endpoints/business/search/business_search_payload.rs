@@ -28,7 +28,7 @@ pub struct BusinessSearchPayload {
     ///
     /// This field is used as a suggestion to the search.
     /// The actual search radius may be lower than the suggested radius in dense urban areas, and higher in regions of less business density.
-    /// If the specified value is too large, a AREA_TOO_LARGE error may be returned.
+    /// If the specified value is too large, a `AREA_TOO_LARGE` error may be returned.
     /// The max value is 40000 meters (about 25 miles).
     pub radius: Option<usize>,
 
@@ -56,10 +56,10 @@ pub struct BusinessSearchPayload {
     pub offset: Option<usize>,
 
     /// Suggestion to the search algorithm that the results be sorted by one of the these modes:
-    /// best_match, rating, review_count or distance.
+    /// `best_match`, rating, `review_count` or distance.
     ///
-    /// The default is best_match.
-    /// Note that specifying the sort_by is a suggestion (not strictly enforced) to Yelp's search,
+    /// The default is `best_match`.
+    /// Note that specifying the `sort_by` is a suggestion (not strictly enforced) to Yelp's search,
     /// which considers multiple input parameters to return the most relevant results.
     ///
     /// For example, the rating sort is not strictly sorted by the rating value, but by an adjusted
@@ -76,14 +76,14 @@ pub struct BusinessSearchPayload {
     /// Default to false.
     /// When set to true, only return the businesses open now.
     ///
-    /// Notice that open_at and open_now cannot be used together.
+    /// Notice that `open_at` and `open_now` cannot be used together.
     pub open_now: Option<bool>,
 
     /// An integer representing the Unix time in the same timezone of the search location.
     ///
     /// If specified, it will return business open at the given time.
     ///
-    /// Notice that open_at and open_now cannot be used together.
+    /// Notice that `open_at` and `open_now` cannot be used together.
     pub open_at: Option<usize>,
 
     /// Try these additional filters to return specific search results!
@@ -91,7 +91,7 @@ pub struct BusinessSearchPayload {
     /// You can combine multiple attributes by providing a comma separated like "attribute1,attribute2".
     /// If multiple attributes are used, only businesses that satisfy ALL attributes will be returned
     /// in search results.
-    /// For example, the attributes "hot_and_new,request_a_quote" will return businesses that are Hot
+    /// For example, the attributes "`hot_and_new,request_a_quote`" will return businesses that are Hot
     /// and New AND offer Request a Quote.
     pub attributes: Option<HashSet<Attribute>>,
 }
@@ -109,7 +109,7 @@ impl BusinessSearchPayload {
     ///
     /// Returns `BusinessSearchPayloadError::BothOpenNowAndOpenAtSet` if both `open_now` and
     /// `open_at` are set. Only one of the other can be set.
-    #[allow(clippy::too_many_arguments, clippy::missing_const_for_fn)]
+    #[expect(clippy::too_many_arguments)]
     pub fn new(
         term: Option<String>,
         location: Option<String>,

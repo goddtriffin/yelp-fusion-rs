@@ -4,7 +4,7 @@ use reqwest::Client;
 pub const BASE_URL: &str = "https://api.yelp.com/v3";
 
 #[derive(Debug, Clone)]
-#[allow(clippy::module_name_repetitions)]
+#[expect(clippy::module_name_repetitions)]
 pub struct YelpFusionClient {
     pub(crate) client: Client,
     pub(crate) base_url: String,

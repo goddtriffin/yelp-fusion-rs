@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct Business {
     /// Unique Yelp ID of this business.
     ///
-    /// Example: '4kMBvIEWPxWkWKFN__8SxQ'
+    /// Example: '`4kMBvIEWPxWkWKFN__8SxQ`'
     pub id: String,
 
     /// Unique Yelp alias of this business.
@@ -41,7 +41,7 @@ pub struct Business {
 
     /// List of Yelp transactions that the business is registered for.
     ///
-    /// Current supported values are pickup, delivery and restaurant_reservation.
+    /// Current supported values are pickup, delivery and `restaurant_reservation`.
     pub transactions: Vec<TransactionType>,
 
     /// Price level of the business.
