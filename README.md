@@ -2,7 +2,6 @@
 
 [![Version](https://img.shields.io/crates/v/yelp-fusion-rs)](https://crates.io/crates/yelp-fusion-rs)
 [![Docs](https://docs.rs/yelp-fusion-rs/badge.svg)](https://docs.rs/yelp-fusion-rs)
-[![License](https://img.shields.io/crates/l/yelp-fusion-rs)](https://crates.io/crates/yelp-fusion-rs)
 
 A Rust library for the Yelp Fusion API.
 
@@ -67,7 +66,7 @@ For more examples, check out the [examples](https://github.com/goddtriffin/yelp-
 ## Developers
 
 Project is under active maintenance - even if there are no recent commits!
-Please submit an issue / bug request if you the library needs updating for any reason!
+Please submit an issue / bug request if the library needs updating for any reason!
 
 ### Feature Requests
 
@@ -84,16 +83,9 @@ If you're feeling extra adventurous and/or REALLY need those endpoints implement
 ### Commands
 
 - `make lint`
-  - Lints the codebase via `cargo fmt`.
 - `make test`
-  - Tests the codebase via:
-    - `cargo fmt`
-    - `cargo check`
-    - `cargo clippy` (with insanely strict defaults)
-    - `cargo test`.
+- `make fix`
 
 ## Credits
 
 Made with 🤬 and 🥲 by [Todd Everett Griffin](https://www.toddgriffin.me/).
-
-`yelp-fusion-rs` is open source under the [MIT License](https://github.com/goddtriffin/yelp-fusion-rs/blob/main/LICENSE).
