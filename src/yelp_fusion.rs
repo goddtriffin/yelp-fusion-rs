@@ -1,5 +1,5 @@
-use reqwest::blocking::Client as BlockingClient;
 use reqwest::Client;
+use reqwest::blocking::Client as BlockingClient;
 
 pub const BASE_URL: &str = "https://api.yelp.com/v3";
 
