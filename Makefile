@@ -34,3 +34,8 @@ test: ## runs tests
 fix: ## fixes the codebase
 	cargo fix --allow-dirty --allow-staged
 	cargo clippy --fix --allow-dirty --allow-staged
+
+.PHONY: publish_dry_run
+publish_dry_run: ## dry run of publishing libraries to crates.io
+	cargo publish --package yelp-fusion-rs --dry-run
+	cargo package --package yelp-fusion-rs --list
