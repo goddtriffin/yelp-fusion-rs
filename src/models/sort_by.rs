@@ -10,19 +10,14 @@ use std::fmt::{Display, Formatter};
 /// For example, the rating sort is not strictly sorted by the rating value, but by an adjusted
 /// rating value that takes into account the number of ratings, similar to a Bayesian average.
 /// This is to prevent skewing results to businesses with a single review.
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum SortBy {
+    #[default]
     BestMatch,
     Rating,
     ReviewCount,
     Distance,
-}
-
-impl Default for SortBy {
-    fn default() -> Self {
-        Self::BestMatch
-    }
 }
 
 impl SortBy {
