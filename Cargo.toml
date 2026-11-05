@@ -3,9 +3,9 @@ members = ["yelp_fusion_rs"]
 resolver = "3"
 
 [workspace.package]
-version = "0.2.3"
+version = "0.2.4"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.99"
 authors = ["Todd Everett Griffin <tgriffin115@gmail.com>"]
 readme = "README.md"
 repository = "https://github.com/goddtriffin/yelp-fusion-rs"
@@ -14,7 +14,7 @@ description = "A Rust library for the Yelp Fusion API."
 license = "MIT"
 keywords = ["yelp", "fusion", "api", "http", "client"]
 categories = ["web-programming", "api-bindings"]
-include = ["**/*.rs", "Cargo.toml", ".clippy.toml", "LICENSE", "README.md"]
+include = ["**/*.rs", "Cargo.toml", "LICENSE", "README.md"]
 
 [workspace.lints.rust]
 unsafe_code = { level = "forbid", priority = 0 }
@@ -36,16 +36,17 @@ cargo = { level = "deny", priority = -1 }
 
 [workspace.dependencies]
 # tokio
-tokio = { version = "1.43.0", features = ["full"] }
+tokio = { version = "1.53.1", features = ["full"] }
 
 # http request
-reqwest = { version = "0.12.12", default-features = false, features = [
+reqwest = { version = "0.13.4", default-features = false, features = [
   "json",
-  "rustls-tls",
+  "rustls",
+  "query",
   "blocking",
 ] }
-bytes = "1.10.0"
+bytes = "1.12.1"
 
 # serde
-serde = { version = "1.0.218", features = ["derive"] }
-serde_json = "1.0.139"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"

@@ -131,17 +131,17 @@ impl BusinessSearchPayload {
         }
 
         // make sure radius is under `40,000` meters (~25 miles)
-        if let Some(radius) = radius {
-            if radius > 40_000 {
-                return Err(BusinessSearchPayloadError::RadiusTooLarge(radius));
-            }
+        if let Some(radius) = radius
+            && radius > 40_000
+        {
+            return Err(BusinessSearchPayloadError::RadiusTooLarge(radius));
         }
 
         // make sure limit is under `50` entries
-        if let Some(limit) = limit {
-            if limit > 50 {
-                return Err(BusinessSearchPayloadError::LimitTooLarge(limit));
-            }
+        if let Some(limit) = limit
+            && limit > 50
+        {
+            return Err(BusinessSearchPayloadError::LimitTooLarge(limit));
         }
 
         // only `open_now` OR `open_at` can be set - not both
